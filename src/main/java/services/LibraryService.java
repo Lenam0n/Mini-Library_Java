@@ -1,4 +1,4 @@
-// Datei: in_memory_repository/LibraryService.java
+// Datei: services/LibraryService.java
 package services;
 
 import java.util.List;
@@ -15,61 +15,35 @@ import interfaces.IExceptionSupplier;
 import interfaces.ILibraryService;
 import interfaces.IPrinter;
 import interfaces.ISearchableRepository;
+import interfaces.IThrowableSupplier;
 import interfaces.IValidator;
 import utils.ValidationUtils;
+import validators.BookValidator;
+import validators.MemberValidator;
 
 /**
  * Service‐Klasse für Buch‐ und Mitglieder‐Operationen.
- * Verwendet ISearchableRepository.findBy(...) mit IExceptionSupplier, um Exceptions zentral zu definieren.
+ * Verwendet ErrorService zum zentralen Exception‐Handling
+ * und Validator‐Klassen für Validierungen.
  */
 public class LibraryService implements ILibraryService {
 
-    private final ISearchableRepository<Book, String> bookRepo;
+    private final ISearchableRepository<Book, String>  bookRepo;
     private final ISearchableRepository<Member, Long> memberRepo;
 
-    // Functional Interfaces für Ausnahme-Erzeugung
-    private final IExceptionSupplier<String> bookNotFoundEx = id ->
-        new BookNotFoundException("Buch mit ISBN " + id + " nicht gefunden");
+    // IExceptionSupplier, um gezielt RuntimeExceptions zu erzeugen
+    private final IThrowableSupplier<String> bookNotFoundEx = isbn ->
+        new BookNotFoundException("Buch mit ISBN " + isbn + " nicht gefunden");
 
-    private final IExceptionSupplier<Long> memberNotFoundEx = id ->
+    private final IThrowableSupplier<Long> memberNotFoundEx = id ->
         new MemberNotFoundException("Mitglied mit ID " + id + " nicht gefunden");
 
-    // Validierungs‐Validatoren für Book
-    private final IValidator<Book> titleNotEmpty = book ->
-        (book.getTitle() != null && !book.getTitle().isBlank())
-            ? Result.success(book)
-            : Result.error("Titel darf nicht leer sein");
-
-    private final IValidator<Book> authorNotEmpty = book ->
-        (book.getAuthor() != null && !book.getAuthor().isBlank())
-            ? Result.success(book)
-            : Result.error("Autor darf nicht leer sein");
-
-    private final IValidator<Book> isbnFormatValid = book -> {
-        String isbn = book.getIsbn();
-        Pattern p = Pattern.compile("^\\d{3}-\\d{10}$");
-        if (isbn != null && p.matcher(isbn).matches()) {
-            return Result.success(book);
-        }
-        return Result.error("Ungültige ISBN: " + isbn);
-    };
-
-    // Validierungs‐Validatoren für Member
-    private final IValidator<Member> memberNameNotEmpty = member ->
-        (member.getName() != null && !member.getName().isBlank())
-            ? Result.success(member)
-            : Result.error("Name darf nicht leer sein");
-
-    private final IValidator<Member> memberEmailValid = member -> {
-        String email = member.getEmail();
-        if (email != null && email.contains("@") && email.contains(".")) {
-            return Result.success(member);
-        }
-        return Result.error("Ungültige E-Mail: " + email);
-    };
+    // Validator-Instanzen
+    private final IValidator<Book>   bookValidator   = new BookValidator();
+    private final IValidator<Member> memberValidator = new MemberValidator();
 
     public LibraryService(
-        ISearchableRepository<Book, String> bookRepo,
+        ISearchableRepository<Book, String>  bookRepo,
         ISearchableRepository<Member, Long> memberRepo
     ) {
         this.bookRepo   = bookRepo;
@@ -87,6 +61,7 @@ public class LibraryService implements ILibraryService {
     }
 
     // --- Buch-Operationen ---
+
     @Override
     public List<Book> findAllBooks() {
         return bookRepo.findAll();
@@ -94,38 +69,42 @@ public class LibraryService implements ILibraryService {
 
     @Override
     public Book findBookByIsbn(String isbn) {
-        return bookRepo.findBy(
-            b -> b.getId().equals(isbn),
-            () -> bookNotFoundEx.create(isbn)
+        // Wrapped in ErrorService.execute, gibt null bei Fehler
+        return ErrorService.execute(() ->
+            bookRepo.findBy(
+                b -> b.getId().equals(isbn),
+                () -> bookNotFoundEx.getException(isbn)
+            )
         );
     }
 
     @Override
     public void deleteBookByIsbn(String isbn) {
-        bookRepo.findBy(
-            b -> b.getId().equals(isbn),
-            () -> bookNotFoundEx.create(isbn)
-        );
-        bookRepo.deleteById(isbn);
+        // Find und Löschen in ErrorService.run, um Exception zentral zu behandeln
+        ErrorService.run(() -> {
+            // Löst BookNotFoundException aus, falls nicht existiert
+            bookRepo.findBy(
+                b -> b.getId().equals(isbn),
+                () -> bookNotFoundEx.getException(isbn)
+            );
+            bookRepo.deleteById(isbn);
+            IPrinter.out("Buch mit ISBN " + isbn + " erfolgreich gelöscht");
+        });
     }
 
     @Override
     public void saveBook(Book book) {
-        Result<Book, String> r1 = ValidationUtils.validate(book, titleNotEmpty);
-        if (r1.isError()) {
-            IPrinter.err("Fehler Speicherung Buch: " + r1.getError());
+        // 1) Validierung mit BookValidator
+        Result<Book, String> validation = bookValidator.validate(book);
+        if (validation.isError()) {
+            IPrinter.err("Fehler Speicherung Buch: " + validation.getError());
             return;
         }
-        Result<Book, String> r2 = ValidationUtils.validate(book, authorNotEmpty);
-        if (r2.isError()) {
-            IPrinter.err("Fehler Speicherung Buch: " + r2.getError());
-            return;
-        }
-        Result<Book, String> r3 = ValidationUtils.validate(book, isbnFormatValid);
-        if (r3.isError()) {
-            IPrinter.err("Fehler Speicherung Buch: " + r3.getError());
-            return;
-        }
+
+        // 2) ISBN‐Format-Check (zusätzlich, falls noch nötig)
+        //    BookValidator deckt Formatprüfung bereits ab, kann hier entfallen
+
+        // 3) Speichern
         bookRepo.save(book);
         IPrinter.out("Buch erfolgreich gespeichert: " + book);
     }
@@ -141,6 +120,7 @@ public class LibraryService implements ILibraryService {
     }
 
     // --- Mitglieder-Operationen ---
+
     @Override
     public List<Member> findAllMembers() {
         return memberRepo.findAll();
@@ -148,33 +128,35 @@ public class LibraryService implements ILibraryService {
 
     @Override
     public Member findMemberById(Long id) {
-        return memberRepo.findBy(
-            m -> m.getId().equals(id),
-            () -> memberNotFoundEx.create(id)
+        return ErrorService.execute(() ->
+            memberRepo.findBy(
+                m -> m.getId().equals(id),
+                () -> memberNotFoundEx.getException(id)
+            )
         );
     }
 
     @Override
     public void deleteMemberById(Long id) {
-        memberRepo.findBy(
-            m -> m.getId().equals(id),
-            () -> memberNotFoundEx.create(id)
-        );
-        memberRepo.deleteById(id);
+        ErrorService.run(() -> {
+            // Löst MemberNotFoundException aus, falls nicht existiert
+            memberRepo.findBy(
+                m -> m.getId().equals(id),
+                () -> memberNotFoundEx.getException(id)
+            );
+            memberRepo.deleteById(id);
+            IPrinter.out("Mitglied mit ID " + id + " erfolgreich gelöscht");
+        });
     }
 
     @Override
     public void saveMember(Member member) {
-        Result<Member, String> r1 = ValidationUtils.validate(member, memberNameNotEmpty);
-        if (r1.isError()) {
-            IPrinter.err("Fehler Speicherung Member: " + r1.getError());
+        Result<Member, String> validation = memberValidator.validate(member);
+        if (validation.isError()) {
+            IPrinter.err("Fehler Speicherung Member: " + validation.getError());
             return;
         }
-        Result<Member, String> r2 = ValidationUtils.validate(member, memberEmailValid);
-        if (r2.isError()) {
-            IPrinter.err("Fehler Speicherung Member: " + r2.getError());
-            return;
-        }
+
         memberRepo.save(member);
         IPrinter.out("Member erfolgreich gespeichert: " + member);
     }

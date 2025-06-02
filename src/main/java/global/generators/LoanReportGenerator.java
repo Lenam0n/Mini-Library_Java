@@ -1,4 +1,3 @@
-// Datei: global/LoanReportGenerator.java
 package global.generators;
 
 import interfaces.IReportGenerator;

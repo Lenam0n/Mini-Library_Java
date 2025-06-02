@@ -1,11 +1,10 @@
-package global;
+package utils;
 
 import java.io.IOException;
 import java.util.List;
 
 import entities.Book;
 import entities.Member;
-import utils.JsonUtils;
 
 /**
  * Lädt initiale Datensätze für Book und Member aus JSON-Dateien,

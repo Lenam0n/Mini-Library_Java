@@ -1,4 +1,3 @@
-// Datei: global/BookReportGenerator.java
 package global.generators;
 
 import entities.Book;

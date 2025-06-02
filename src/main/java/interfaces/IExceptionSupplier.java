@@ -1,22 +1,19 @@
 package interfaces;
 
 /**
- * Ein einfaches Functional Interface, das aus einem Schlüssel-Wert
- * (z. B. ISBN oder Member-ID) eine RuntimeException erzeugt.
+ * Funktionales Interface, das aus einem Eingabeparameter vom Typ T
+ * eine RuntimeException erzeugt. In findBy(...) wird dann eine
+ * Supplier<RuntimeException> daraus gebaut.
  *
- * Beispiel-Aufruf in LibraryService:
- *   () -> bookNotFoundEx.create(isbn)
- *
- * @param <I> der Typ des Schlüssels (z. B. String für ISBN oder Long für Member-ID)
+ * @param <T> Typ des Eingabeparameters (z.B. String für ISBN, Long für Member-ID)
  */
 @FunctionalInterface
-public interface IExceptionSupplier<I> {
+public interface IExceptionSupplier<T> {
     /**
-     * Erzeuge eine RuntimeException auf Basis des übergebenen Schlüssels.
-     *
-     * @param id der Schlüssel (z. B. ISBN oder Member-ID), anhand dessen
-     *           die Fehlermeldung/Exception aufgebaut wird
-     * @return eine passende RuntimeException
+     * Liefert einen Wert vom Typ T oder wirft eine Exception.
+     * 
+     * @return  einen Wert vom Typ T (z. B. List<Book>, Book, Member)
+     * @throws Exception  jede beliebige Exception (checked oder unchecked)
      */
-    RuntimeException create(I id);
+    T get() throws Exception;
 }

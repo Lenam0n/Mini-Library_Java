@@ -1,4 +1,3 @@
-// Datei: global/MemberReportGenerator.java
 package global.generators;
 
 import entities.Member;
