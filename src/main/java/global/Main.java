@@ -5,73 +5,57 @@ import java.util.List;
 import java.util.ArrayList;
 
 import entities.Book;
-import entities.Loan;
 import entities.Member;
-import interfaces.ISearchableRepository;
-import services.BorrowService;
+import entities.Loan;
 import services.ErrorService;
-import services.LibraryService;
-import services.SearchService;
-import services.ReportingService;
-import services.PrintService;
-import utils.DataLoader;
-
+import interfaces.LibraryService;
+import interfaces.BorrowService;
+import interfaces.RepositoryPrintService;
+import interfaces.ReportingService;
 
 /**
- * Einstiegspunkt der Anwendung. Try/Catch-Blöcke sind weitgehend entfernt,
- * da ErrorService sie zentral übernimmt.
+ * Einstiegspunkt der Anwendung – ganz ohne zentrale Services-Klasse.
+ * Wir initialisieren die Repositories und erzeugen direkt
+ * Instanzen der Service‐Interfaces via anonyme Implementierungen.
  */
 public class Main {
     public static void main(String[] args) {
-        // 1) Repositories einrichten
-        ISearchableRepository<Book, String> bookRepo   = new Repository<>();
-        ISearchableRepository<Member, Long> memberRepo = new Repository<>();
+        // 1) Repositories laden
+        Repositories.init();
 
-        // 2) Daten aus JSON-Dateien einlesen
-        List<Book> books = ErrorService.execute(() -> DataLoader.loadBooks("data/books.json"));
-        List<Member> members = ErrorService.execute(() -> DataLoader.loadMembers("data/members.json"));
+        // 2) Service‐Instanzen anlegen
+        LibraryService       library = new LibraryService() {};
+        BorrowService        borrow  = new BorrowService() {};
+        RepositoryPrintService search  = new RepositoryPrintService() {};
+        ReportingService     report  = new ReportingService() {};
 
-        if (books != null) {
-            for (Book b : books) bookRepo.save(b);
-        }
-        if (members != null) {
-            for (Member m : members) memberRepo.save(m);
-        }
+        // --- 1) Alle Bücher ausgeben ---
+        library.printList("Alle Bücher:", library.findAllBooks());
 
-        // 3) Services instanziieren
-        LibraryService   libraryService  = new LibraryService(bookRepo, memberRepo);
-        BorrowService    borrowService   = new BorrowService(bookRepo, memberRepo);
-        SearchService    searchService   = new SearchService(bookRepo, memberRepo);
-        ReportingService reportingService= new ReportingService();
-        PrintService     printService    = new PrintService();
+        // --- 2) Buch per ISBN suchen und ausgeben ---
+        Book foundBook = library.findBookByIsbn("978-0201633610");
+        library.printFound(foundBook, "Buch nicht gefunden", "978-0201633610");
 
-        // 4) CRUD-Listen und Einzel-Suche
-        printService.printList("Alle Bücher:", libraryService.findAllBooks());
-        Book foundBook = ErrorService.execute(() ->
-            libraryService.findBookByIsbn("978-0201633610")
-        );
-        printService.printFound(foundBook, "Buch nicht gefunden", "978-0201633610");
+        // --- 3) Alle Mitglieder ausgeben ---
+        library.printList("Alle Mitglieder:", library.findAllMembers());
 
-        printService.printList("Alle Mitglieder:", libraryService.findAllMembers());
-        Member foundMember = ErrorService.execute(() ->
-            libraryService.findMemberById(3L)
-        );
-        printService.printFound(foundMember, "Mitglied nicht gefunden", 3L);
+        // --- 4) Mitglied per ID suchen und ausgeben ---
+        Member foundMember = library.findMemberById(3L);
+        library.printFound(foundMember, "Mitglied nicht gefunden", 3L);
 
-        // 5) Leih-Service
-        ErrorService.run(() ->
-            borrowService.borrowBook("978-0132350884", 1L)
-        );
+        // --- 5) Buch ausleihen ---
+        borrow.borrowBook("978-0132350884", 1L);
 
-        // 6) Such-Funktionen
-        searchService.printBooksByAuthor("Martin");
-        searchService.printBooksByTitle("Action");
-        searchService.printMembersByName("Alice");
+        // --- 6) Suchfunktionen nutzen ---
+        search.printBooksByAuthor("Martin");
+        search.printBooksByTitle("Action");
+        search.printMembersByName("Alice");
+        search.printMembersByEmail("example@example.com");
 
-        // 7) Reports generieren
-        List<Loan> activeLoans = new ArrayList<>(borrowService.getActiveLoans().values());
-        reportingService.printLoanReport(activeLoans);
-        reportingService.printBookReport(libraryService.findAllBooks());
-        reportingService.printMemberReport(libraryService.findAllMembers());
+        // --- 7) Reports erstellen ---
+        List<Loan> activeLoans = new ArrayList<>(borrow.getActiveLoans().values());
+        report.printLoanReport(activeLoans);
+        report.printBookReport(library.findAllBooks());
+        report.printMemberReport(library.findAllMembers());
     }
 }

@@ -19,9 +19,7 @@ public class LoanReportGenerator implements IReportGenerator<Loan> {
 
     @Override
     public String header() {
-        return ""
-            + "=== Ausleihreport ===\n"
-            + "ISBN           | Member ID | Ausleihdatum\n"
+        return "ISBN           | Member ID | Ausleihdatum\n"
             + "-----------------------------------------";
     }
 

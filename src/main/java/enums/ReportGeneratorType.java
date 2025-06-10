@@ -48,7 +48,7 @@ public enum ReportGeneratorType {
      * @throws IllegalArgumentException, wenn kein Enum‐Eintrag existiert
      */
     @SuppressWarnings("unchecked")
-    public static <T> IReportGenerator<T> createFor(Class<T> type) {
+	public static <T> IReportGenerator<T> createFor(Class<T> type) {
         for (ReportGeneratorType entry : values()) {
             if (entry.modelClass.equals(type)) {
                 return (IReportGenerator<T>) entry.generatorSupplier.get();

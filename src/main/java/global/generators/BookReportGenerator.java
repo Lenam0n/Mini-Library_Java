@@ -17,7 +17,6 @@ public class BookReportGenerator implements IReportGenerator<Book> {
     @Override
     public String header() {
         return String.format(
-            "=== Bücherübersicht ===\n" +
             "ISBN             | Titel                            | Autor\n" +
             "--------------------------------------------------------------"
         );

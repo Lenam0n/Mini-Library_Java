@@ -14,7 +14,6 @@ public class MemberReportGenerator implements IReportGenerator<Member> {
     @Override
     public String header() {
         return String.format(
-            "=== Mitgliederübersicht ===\n" +
             "ID    | Name                           | E-Mail\n" +
             "----------------------------------------------------"
         );

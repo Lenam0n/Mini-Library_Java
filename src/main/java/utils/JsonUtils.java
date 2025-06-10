@@ -6,11 +6,13 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 
 import entities.Book;
+import entities.Loan;
 import entities.Member;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +79,35 @@ public class JsonUtils {
                 }
             }
             return members;
+        }
+    }
+    /**
+     * Liest eine Liste von Loan‐Objekten aus der JSON-Datei.
+     * Erwartet ein JSON-Array mit Objekten, die die Felder
+     * "isbn", "memberId" und "borrowDate" (YYYY-MM-DD) enthalten.
+     */
+    public static List<Loan> readLoans(String path) throws IOException {
+        try (InputStream fis = new FileInputStream(path);
+             JsonReader reader = Json.createReader(fis)) {
+
+            JsonArray jsonArray = reader.readArray();
+            List<Loan> loans = new ArrayList<>(jsonArray.size());
+
+            for (JsonObject obj : jsonArray.getValuesAs(JsonObject.class)) {
+                String isbn       = obj.getString("isbn", null);
+                Long   memberId   = obj.containsKey("memberId")
+                                    ? obj.getJsonNumber("memberId").longValue()
+                                    : null;
+                String dateString = obj.getString("borrowDate", null);
+                LocalDate borrowDate = (dateString != null)
+                                       ? LocalDate.parse(dateString)
+                                       : null;
+
+                if (isbn != null && memberId != null && borrowDate != null) {
+                    loans.add(new Loan(isbn, memberId, borrowDate));
+                }
+            }
+            return loans;
         }
     }
 }

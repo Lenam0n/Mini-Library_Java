@@ -1,9 +1,13 @@
+// Datei: entities/Member.java
 package entities;
 
 import interfaces.IEntity;
+import interfaces.Validatable;
+import interfaces.MemberValidator;
+import global.Result;
 import model.IMemberModel;
 
-public class Member implements IEntity<Long>, IMemberModel {
+public class Member implements IEntity<Long>, IMemberModel, Validatable<Member, MemberValidator> {
     private Long id;
     private String name;
     private String email;
@@ -11,8 +15,8 @@ public class Member implements IEntity<Long>, IMemberModel {
     public Member() { /* für JSON‐Deserialisierung benötigt */ }
 
     public Member(Long id, String name, String email) {
-        this.id = id;
-        this.name = name;
+        this.id    = id;
+        this.name  = name;
         this.email = email;
     }
 
@@ -32,5 +36,17 @@ public class Member implements IEntity<Long>, IMemberModel {
     @Override
     public String toString() {
         return String.format("Member[id=%d, name=%s, email=%s]", id, name, email);
+    }
+
+    // liefert den Singleton-Validator zurück
+    @Override
+    public MemberValidator getValidator() {
+        return MemberValidator.INSTANCE;
+    }
+
+    // optional: delegiert auf das Default-Validate der Validatable-Schnittstelle
+    @Override
+    public Result<Member, RuntimeException> validate() {
+        return Validatable.super.validate();
     }
 }
