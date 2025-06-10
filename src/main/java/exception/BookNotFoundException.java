@@ -1,7 +1,7 @@
 package exception;
 
-import interfaces.IBookException;
-import interfaces.IValidationException;
+import interfaces.execptions.IBookException;
+import interfaces.execptions.IValidationException;
 
 /**
 * Spezielle RuntimeException, wenn ein Buch nicht gefunden wird.

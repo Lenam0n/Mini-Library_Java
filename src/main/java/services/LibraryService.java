@@ -1,5 +1,5 @@
 // Datei: interfaces/LibraryService.java
-package interfaces;
+package services;
 
 import java.util.List;
 
@@ -9,7 +9,8 @@ import exception.BookNotFoundException;
 import exception.MemberNotFoundException;
 import global.Repositories;
 import global.Result;
-import services.ErrorService;
+import interfaces.IActions;
+import interfaces.IPrinter;
 
 /**
  * Service‐Interface für Buch‐ und Mitglieder‐Operationen.

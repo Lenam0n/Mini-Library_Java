@@ -1,7 +1,7 @@
 package exception;
 
-import interfaces.IBookException;
-import interfaces.IValidationException;
+import interfaces.execptions.IBookException;
+import interfaces.execptions.IValidationException;
 
 public class BookUnavailableException extends RuntimeException implements IBookException , IValidationException{
 

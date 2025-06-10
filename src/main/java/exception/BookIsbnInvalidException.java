@@ -1,7 +1,7 @@
 package exception;
 
-import interfaces.IBookException;
-import interfaces.IValidationException;
+import interfaces.execptions.IBookException;
+import interfaces.execptions.IValidationException;
 
 /**
 * Wird geworfen, wenn die ISBN null oder nicht im Muster "XXX-YYYYYYYYYY" ist.

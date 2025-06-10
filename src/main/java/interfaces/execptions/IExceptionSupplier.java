@@ -1,4 +1,4 @@
-package interfaces;
+package interfaces.execptions;
 
 /**
  * Funktionales Interface, das aus einem Eingabeparameter vom Typ T

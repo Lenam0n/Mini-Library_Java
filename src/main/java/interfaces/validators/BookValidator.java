@@ -1,4 +1,4 @@
-package interfaces;    // oder: validators – passe an dein Projekt an
+package interfaces.validators;    // oder: validators – passe an dein Projekt an
 
 import java.util.regex.Pattern;
 
@@ -8,6 +8,7 @@ import exception.BookIsbnInvalidException;
 import exception.BookNullException;
 import exception.BookTitleEmptyException;
 import global.Result;
+import interfaces.IValidator;
 
 public interface BookValidator extends IValidator<Book> {
 

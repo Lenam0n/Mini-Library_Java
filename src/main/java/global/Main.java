@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import entities.Book;
 import entities.Member;
 import entities.Loan;
+import services.BorrowService;
 import services.ErrorService;
-import interfaces.LibraryService;
-import interfaces.BorrowService;
-import interfaces.RepositoryPrintService;
-import interfaces.ReportingService;
+import services.LibraryService;
+import services.ReportingService;
+import services.RepositoryPrintService;
 
 /**
  * Einstiegspunkt der Anwendung – ganz ohne zentrale Services-Klasse.

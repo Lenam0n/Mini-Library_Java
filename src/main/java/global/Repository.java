@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import interfaces.IEntity;
-import interfaces.Validatable;
+import services.RepositoryPrintService;
+import utils.Validatable;
 import interfaces.IRepository;
-import interfaces.RepositoryPrintService;
 
 /**
  * Einfache In-Memory-Implementierung von IRepository.

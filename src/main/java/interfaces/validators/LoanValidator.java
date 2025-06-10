@@ -1,5 +1,5 @@
 // Datei: validators/LoanValidator.java
-package interfaces;
+package interfaces.validators;
 
 import entities.Loan;
 import exception.LoanDateInFutureException;

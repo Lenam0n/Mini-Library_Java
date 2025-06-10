@@ -1,9 +1,11 @@
-package interfaces;
+package services;
 
 import java.util.List;
 import java.util.Objects;
 
 import global.Result;
+import interfaces.IPrinter;
+import interfaces.IReportGenerator;
 
 /**
  * Druck-Dienst, der mit Result<String, RuntimeException> arbeitet.

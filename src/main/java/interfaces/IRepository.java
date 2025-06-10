@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 
 import global.Result;
 import services.ErrorService;
+import utils.Validatable;
 import interfaces.IPrinter;
 
 /**

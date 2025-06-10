@@ -1,7 +1,7 @@
 package exception;
 
-import interfaces.IBookException;
-import interfaces.IMemberException;
+import interfaces.execptions.IBookException;
+import interfaces.execptions.IMemberException;
 
 /**
  * Wird geworfen, wenn bei der Rückgabe versucht wird,

@@ -1,4 +1,4 @@
-package interfaces;
+package services;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -6,10 +6,10 @@ import java.util.function.Predicate;
 import entities.Book;
 import entities.Member;
 import global.Repositories;
-import interfaces.IRepository;       // richtiges Interface importieren
-import interfaces.IEntity;
-import interfaces.Validatable;      // für den Generic‐Bound
 import interfaces.IActions;
+import interfaces.IEntity;
+import interfaces.IRepository;
+import utils.Validatable;
 
 /**
  * Interface statt Klasse. Erweitert PrintService, um Druckmethoden direkt zu nutzen.

@@ -1,5 +1,5 @@
 // Datei: interfaces/BorrowService.java
-package interfaces;
+package services;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,6 +12,7 @@ import entities.Loan;
 import entities.Member;
 import global.Repositories;
 import global.Result;
+import interfaces.IActions;
 import exception.BorrowNotAllowedException;
 import exception.ReturnNotAllowedException;
 

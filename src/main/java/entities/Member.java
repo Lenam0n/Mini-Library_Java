@@ -2,10 +2,10 @@
 package entities;
 
 import interfaces.IEntity;
-import interfaces.Validatable;
-import interfaces.MemberValidator;
+import interfaces.validators.MemberValidator;
 import global.Result;
 import model.IMemberModel;
+import utils.Validatable;
 
 public class Member implements IEntity<Long>, IMemberModel, Validatable<Member, MemberValidator> {
     private Long id;

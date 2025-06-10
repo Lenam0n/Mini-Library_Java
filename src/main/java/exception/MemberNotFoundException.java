@@ -1,7 +1,7 @@
 package exception;
 
-import interfaces.IMemberException;
-import interfaces.IValidationException;
+import interfaces.execptions.IMemberException;
+import interfaces.execptions.IValidationException;
 
 /**
 * Spezielle RuntimeException, wenn ein Member nicht gefunden wird.

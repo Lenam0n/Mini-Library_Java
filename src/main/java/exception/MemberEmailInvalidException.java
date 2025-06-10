@@ -1,7 +1,7 @@
 package exception;
 
-import interfaces.IMemberException;
-import interfaces.IValidationException;
+import interfaces.execptions.IMemberException;
+import interfaces.execptions.IValidationException;
 
 /**
 * Wird geworfen, wenn die E-Mail null oder nicht den Grundanforderungen entspricht.

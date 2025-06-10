@@ -1,4 +1,4 @@
-package interfaces;
+package interfaces.execptions;
 
 /**
  * Ein Supplier, der einen Wert vom Typ T liefert und dabei auch checked Exceptions werfen darf.

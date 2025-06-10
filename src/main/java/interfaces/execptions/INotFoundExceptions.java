@@ -1,4 +1,4 @@
-package interfaces;
+package interfaces.execptions;
 
 import exception.BookNotFoundException;
 import exception.MemberNotFoundException;

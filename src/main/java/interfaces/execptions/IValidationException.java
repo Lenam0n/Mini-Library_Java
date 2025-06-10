@@ -1,4 +1,4 @@
-package interfaces;
+package interfaces.execptions;
 
 /**
 * Marker‐Interface für alle Validierungs‐Ausnahmen.

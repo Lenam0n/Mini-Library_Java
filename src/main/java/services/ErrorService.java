@@ -1,9 +1,9 @@
 package services;
 
 import interfaces.IPrinter;
-import interfaces.IExceptionSupplier;
-import interfaces.IRunnableException;
-import interfaces.IThrowableSupplier;
+import interfaces.execptions.IExceptionSupplier;
+import interfaces.execptions.IRunnableException;
+import interfaces.execptions.IThrowableSupplier;
 
 import java.util.HashMap;
 import java.util.Map;

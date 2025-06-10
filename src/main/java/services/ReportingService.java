@@ -1,4 +1,4 @@
-package interfaces;
+package services;
 
 import java.util.List;
 
@@ -7,7 +7,6 @@ import entities.Loan;
 import entities.Member;
 import exception.ReportNullException;
 import interfaces.IReportGenerator;
-import interfaces.PrintService;
 import global.Result;
 
 /**
