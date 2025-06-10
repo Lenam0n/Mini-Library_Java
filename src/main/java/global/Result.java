@@ -1,6 +1,6 @@
 package global;
 
-import interfaces.IResult;
+import interfaces.models.IResult;
 
 /**
  * Konkrete Basisklasse für IResult: entweder success(V) oder error(E).

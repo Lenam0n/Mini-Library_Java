@@ -8,9 +8,10 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import global.Result;
-import services.ErrorService;
-import utils.Validatable;
 import interfaces.IPrinter;
+import interfaces.models.IEntity;
+import interfaces.services.ErrorService;
+import interfaces.utils.Validatable;
 
 /**
  * Universelles Repository-Interface:

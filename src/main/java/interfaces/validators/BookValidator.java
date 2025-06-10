@@ -3,10 +3,10 @@ package interfaces.validators;    // oder: validators – passe an dein Projekt 
 import java.util.regex.Pattern;
 
 import entities.Book;
-import exception.BookAuthorEmptyException;
-import exception.BookIsbnInvalidException;
-import exception.BookNullException;
-import exception.BookTitleEmptyException;
+import exceptions.BookAuthorEmptyException;
+import exceptions.BookIsbnInvalidException;
+import exceptions.BookNullException;
+import exceptions.BookTitleEmptyException;
 import global.Result;
 import interfaces.IValidator;
 

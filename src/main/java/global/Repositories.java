@@ -1,12 +1,12 @@
 package global;
 
 import interfaces.IRepository;
-import services.ErrorService;
+import interfaces.services.ErrorService;
+import interfaces.utils.Loader;
 import entities.Book;
 import entities.Member;
+import exceptions.RepositoryInitializationException;
 import entities.Loan;
-import exception.RepositoryInitializationException;
-import utils.DataLoader;
 
 public final class Repositories {
     public static IRepository<Book, String> BOOK;
@@ -16,9 +16,9 @@ public final class Repositories {
     private Repositories() {}
 
     public static void init() {
-        BOOK   = ErrorService.execute(DataLoader::createBookRepository);
-        MEMBER = ErrorService.execute(DataLoader::createMemberRepository);
-        LOAN   = ErrorService.execute(DataLoader::createLoanRepository); // NEU
+        BOOK   = ErrorService.execute(Loader::createBookRepository);
+        MEMBER = ErrorService.execute(Loader::createMemberRepository);
+        LOAN   = ErrorService.execute(Loader::createLoanRepository); // NEU
 
         if (BOOK == null) {
             throw new RepositoryInitializationException("Book-Repository konnte nicht initialisiert werden.");

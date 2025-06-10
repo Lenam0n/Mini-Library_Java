@@ -2,9 +2,9 @@
 package enums;
 
 import interfaces.IReportGenerator;
-import global.generators.BookReportGenerator;
-import global.generators.MemberReportGenerator;
-import global.generators.LoanReportGenerator;
+import interfaces.generators.BookReportGenerator;
+import interfaces.generators.LoanReportGenerator;
+import interfaces.generators.MemberReportGenerator;
 
 import java.util.function.Supplier;
 

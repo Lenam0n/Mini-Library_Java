@@ -2,11 +2,11 @@
 package interfaces.validators;
 
 import entities.Loan;
-import exception.LoanDateInFutureException;
-import exception.LoanDateNullException;
-import exception.LoanIsbnEmptyException;
-import exception.LoanMemberIdNullException;
-import exception.LoanNullException;
+import exceptions.LoanDateInFutureException;
+import exceptions.LoanDateNullException;
+import exceptions.LoanIsbnEmptyException;
+import exceptions.LoanMemberIdNullException;
+import exceptions.LoanNullException;
 import global.Result;
 import interfaces.IValidator;
 

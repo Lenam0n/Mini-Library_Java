@@ -1,10 +1,10 @@
 package entities;
 
-import interfaces.IEntity;
+import interfaces.models.IBookModel;
+import interfaces.models.IEntity;
+import interfaces.utils.Validatable;
 import interfaces.validators.BookValidator;
 import global.Result;
-import model.IBookModel;
-import utils.Validatable;
 
 public class Book implements IEntity<String>, IBookModel, Validatable<Book,BookValidator> {
     private String isbn;

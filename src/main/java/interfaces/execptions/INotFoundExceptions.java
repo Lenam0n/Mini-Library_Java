@@ -1,7 +1,7 @@
 package interfaces.execptions;
 
-import exception.BookNotFoundException;
-import exception.MemberNotFoundException;
+import exceptions.BookNotFoundException;
+import exceptions.MemberNotFoundException;
 
 /**
 * Statt eigener „ExceptionSuppliers“-Klasse packen wir die beiden Lambdas

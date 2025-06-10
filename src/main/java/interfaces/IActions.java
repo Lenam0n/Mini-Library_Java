@@ -1,7 +1,7 @@
 package interfaces;
 
-import services.ErrorService;
 import interfaces.IPrinter;
+import interfaces.services.ErrorService;
 
 /**
  * Vereinheitlicht:

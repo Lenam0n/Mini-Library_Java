@@ -1,9 +1,9 @@
 // Datei: entities/Loan.java
 package entities;
 
+import interfaces.models.IEntity;
+import interfaces.utils.Validatable;
 import interfaces.validators.LoanValidator;
-import utils.Validatable;
-import interfaces.IEntity;
 import global.Result;
 
 import java.time.LocalDate;

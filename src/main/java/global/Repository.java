@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import interfaces.IEntity;
-import services.RepositoryPrintService;
-import utils.Validatable;
 import interfaces.IRepository;
+import interfaces.models.IEntity;
+import interfaces.services.RepositoryPrintService;
+import interfaces.utils.Validatable;
 
 /**
  * Einfache In-Memory-Implementierung von IRepository.

@@ -6,12 +6,12 @@ import java.util.ArrayList;
 
 import entities.Book;
 import entities.Member;
+import interfaces.services.BorrowService;
+import interfaces.services.ErrorService;
+import interfaces.services.LibraryService;
+import interfaces.services.ReportingService;
+import interfaces.services.RepositoryPrintService;
 import entities.Loan;
-import services.BorrowService;
-import services.ErrorService;
-import services.LibraryService;
-import services.ReportingService;
-import services.RepositoryPrintService;
 
 /**
  * Einstiegspunkt der Anwendung – ganz ohne zentrale Services-Klasse.

@@ -1,9 +1,9 @@
 package interfaces.validators;
 
 import entities.Member;
-import exception.MemberEmailInvalidException;
-import exception.MemberNameEmptyException;
-import exception.MemberNullException;
+import exceptions.MemberEmailInvalidException;
+import exceptions.MemberNameEmptyException;
+import exceptions.MemberNullException;
 import global.Result;
 import interfaces.IValidator;
 
